@@ -7,29 +7,29 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # 初期条件 ★要変更
-start_age_years = ******　#現在の年齢
-start_age_months = ****** #現在の年齢(月数)を入力。デフォルトは1月にしています。
-initial_investment = ******  # 現在の投資信託
-initial_cash = ******  # 現在の現金
+start_age_years = ******# 現在の年齢
+start_age_months = ******# 現在の年齢(月数)を入力。デフォルトは1月にしています。
+initial_investment = ******# 現在の投資信託
+initial_cash = ******# 現在の現金
 
 #　収入と支出　★要変更
-monthly_income = ******　#現在の手取り収入
-monthly_expense = ****** #現在の支出(家賃またはローンは含まない)
-rent_free_months = ******　#社宅で家賃が掛からない現在からの期間(単位:月数)。社宅ない人は"rent_free_months =　0"とする。
-rent_after = ******　#FIRE前の家賃またはローン支払い。なしなら0とする。
+monthly_income = ******#現在の手取り収入
+monthly_expense = ******#現在の支出(家賃またはローンは含まない)
+rent_free_months = ******#社宅で家賃が掛からない現在からの期間(単位:月数)。社宅ない人は"rent_free_months =　0"とする。
+rent_after = ******#FIRE前の家賃またはローン支払い。なしなら0とする。
 
 #　月額積立額 ★要変更
-monthly_contribution_before = ****** #月額積立額
-monthly_contribution_after = ******　#月額積立額(途中から積立額を変更する場合に使用する。しない場合は上記コードと同じ数値を入力)
+monthly_contribution_before = ******#月額積立額
+monthly_contribution_after = ******#月額積立額(途中から積立額を変更する場合に使用する。しない場合は上記コードと同じ数値を入力)
 
 #　リスク資産パラメーター
-annual_return = 0.06　#投資信託の年利回り。S&P500を参考に6%をデフォルト設定。
-monthly_return = (1 + annual_return) ** (1 / 12) - 1　#投資信託の月次利回り。
-safe_multiplier = 1 / 0.035  # 4%ルールよりも保守的な3.5%ルールを採用
+annual_return = 0.06#投資信託の年利回り。S&P500を参考に6%をデフォルト設定。
+monthly_return = (1 + annual_return) ** (1 / 12) - 1#投資信託の月次利回り。
+safe_multiplier = 1 / 0.035# 4%ルールよりも保守的な3.5%ルールを採用
 
 # リタイア後の支出 ★要変更
-house_loan = ******　#FIRE後の家賃またはローン支払い
-fire_expense = monthly_expense + house_loan  # FIRE後の支出
+house_loan = ******#FIRE後の家賃またはローン支払い
+fire_expense = monthly_expense + house_loan# FIRE後の支出
 
 # グラフ用期間：開始歳〜終了歳 ★要変更
 plot_end_age = ******
