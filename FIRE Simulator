@@ -18,7 +18,7 @@ monthly_expense = ****** #現在の支出(家賃またはローンは含まな�
 rent_free_months = ******　#社宅で家賃が掛からない現在からの期間(単位:月数)。社宅ない人は"rent_free_months =　0"とする。
 rent_after = ******　#FIRE前の家賃またはローン支払い。なしなら0とする。
 
-#　月額積立額
+#　月額積立額 ★要変更
 monthly_contribution_before = ****** #月額積立額
 monthly_contribution_after = ******　#月額積立額(途中から積立額を変更する場合に使用する。しない場合は上記コードと同じ数値を入力)
 
