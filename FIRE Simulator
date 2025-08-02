@@ -1,30 +1,38 @@
-#サイドファイア60万円/年
+#FIREに必要な資産と年齢を算出します。以下のPythonコードに必要事項(年齢、資産、月額積立額)を入力すること。
+#リスク資産の利回り: 6%, 税率: 20% (line = 70, 71)
+#3.5%ルールをFIRE条件として採用。(line = 70)
+#入力項目は「******」と記載されています。
+
 import matplotlib.pyplot as plt
 import numpy as np
 
-# 初期条件
-start_age_years = 34
-start_age_months = 8
-initial_investment = 57279388  # 投資信託 
-initial_cash = 2753008  # 現金 
+# 初期条件 ★要変更
+start_age_years = ******　#現在の年齢
+start_age_months = ****** #現在の年齢(月数)を入力。デフォルトは1月にしています。
+initial_investment = ******  # 現在の投資信託
+initial_cash = ******  # 現在の現金
 
-monthly_income = 541000
-monthly_expense = 142000
-rent_free_months = (37 * 12 + 6) - (start_age_years * 12 + start_age_months)
-rent_after = 90000
+#　収入と支出　★要変更
+monthly_income = ******　#現在の手取り収入
+monthly_expense = ****** #現在の支出(家賃またはローンは含まない)
+rent_free_months = ******　#社宅で家賃が掛からない現在からの期間(単位:月数)。社宅ない人は"rent_free_months =　0"とする。
+rent_after = ******　#FIRE前の家賃またはローン支払い。なしなら0とする。
 
-monthly_contribution_before = 400000
-monthly_contribution_after = 310000
+#　月額積立額
+monthly_contribution_before = ****** #月額積立額
+monthly_contribution_after = ******　#月額積立額(途中から積立額を変更する場合に使用する。しない場合は上記コードと同じ数値を入力)
 
-annual_return = 0.06
-monthly_return = (1 + annual_return) ** (1 / 12) - 1
+#　リスク資産パラメーター
+annual_return = 0.06　#投資信託の年利回り。S&P500を参考に6%をデフォルト設定。
+monthly_return = (1 + annual_return) ** (1 / 12) - 1　#投資信託の月次利回り。
+safe_multiplier = 1 / 0.035  # 4%ルールよりも保守的な3.5%ルールを採用
 
-# リタイア後の支出
-house_loan = 166000
-fire_expense = monthly_expense + house_loan  # 308,000
+# リタイア後の支出 ★要変更
+house_loan = ******　#FIRE後の家賃またはローン支払い
+fire_expense = monthly_expense + house_loan  # FIRE後の支出
 
-# グラフ用期間：34歳8か月〜50歳
-plot_end_age = 50
+# グラフ用期間：開始歳〜終了歳 ★要変更
+plot_end_age = ******
 plot_months = (plot_end_age - start_age_years) * 12 - start_age_months
 
 # 初期資産
@@ -60,12 +68,9 @@ for month in range(plot_months + 1):
     total_assets.append(investment + cash)
     ages.append(current_age_decimal)
 
-# リタイア判定資産額 (3.5%ルール且つ税率20%を考慮+サイドFIREで月5万円収入あり)
+# リタイア判定資産額 (3.5%ルール且つ税率20%を考慮)
 annual_fire_expense = fire_expense * 12
-annual_sideFIRE_income = 50000*12
-safe_multiplier = 1 / 0.035  # ≒28.5714
-Stock_Tax = 0.2
-retirement_threshold = (annual_fire_expense - annual_sideFIRE_income) * safe_multiplier / (1-Stock_Tax)  # 税金等のバッファ
+retirement_threshold = annual_fire_expense * safe_multiplier * 1.25  # 税率20%
 
 # FIRE可能になる最初の年齢
 fire_age = None
@@ -81,10 +86,10 @@ if fire_age is not None:
     months = int(round((fire_age - years) * 12))
     print(f"FIRE可能になる年齢：{years}歳{months}か月（小数表記: {fire_age:.2f}歳）")
 else:
-    print("50歳までにはFIRE水準に達しない。")
+    print(f"{plot_end_age:,.0f}", "歳までにはFIRE水準に達しない。")
 
 final_assets = total_assets[-1]
-print("50歳時点の総資産（円）:", f"{final_assets:,.0f}")
+print(f"{plot_end_age:,.0f}", "歳時点の総資産（円）:", f"{final_assets:,.0f}")
 
 # プロット
 plt.figure(figsize=(10, 6))
