@@ -1,0 +1,100 @@
+#サイドファイア60万円/年
+import matplotlib.pyplot as plt
+import numpy as np
+
+# 初期条件
+start_age_years = 34
+start_age_months = 8
+initial_investment = 57279388  # 投資信託 
+initial_cash = 2753008  # 現金 
+
+monthly_income = 541000
+monthly_expense = 142000
+rent_free_months = (37 * 12 + 6) - (start_age_years * 12 + start_age_months)
+rent_after = 90000
+
+monthly_contribution_before = 400000
+monthly_contribution_after = 310000
+
+annual_return = 0.06
+monthly_return = (1 + annual_return) ** (1 / 12) - 1
+
+# リタイア後の支出
+house_loan = 166000
+fire_expense = monthly_expense + house_loan  # 308,000
+
+# グラフ用期間：34歳8か月〜50歳
+plot_end_age = 50
+plot_months = (plot_end_age - start_age_years) * 12 - start_age_months
+
+# 初期資産
+investment = initial_investment
+cash = initial_cash
+
+# 記録用リスト
+ages = []
+total_assets = []  # in JPY
+
+for month in range(plot_months + 1):
+    current_age_months = start_age_years * 12 + start_age_months + month
+    current_age_decimal = current_age_months / 12
+
+    # 支出
+    rent = 0 if month < rent_free_months else rent_after
+    total_expense = monthly_expense + rent
+    cash -= total_expense
+
+    # 収入
+    cash += monthly_income
+
+    # 積立
+    contribution = monthly_contribution_before if month < rent_free_months else monthly_contribution_after
+    actual_contribution = min(cash, contribution)
+    cash -= actual_contribution
+    investment += actual_contribution
+
+    # 利回り
+    investment *= (1 + monthly_return)
+
+    # 総資産記録（JPY）
+    total_assets.append(investment + cash)
+    ages.append(current_age_decimal)
+
+# リタイア判定資産額 (3.5%ルール且つ税率20%を考慮+サイドFIREで月5万円収入あり)
+annual_fire_expense = fire_expense * 12
+annual_sideFIRE_income = 50000*12
+safe_multiplier = 1 / 0.035  # ≒28.5714
+Stock_Tax = 0.2
+retirement_threshold = (annual_fire_expense - annual_sideFIRE_income) * safe_multiplier / (1-Stock_Tax)  # 税金等のバッファ
+
+# FIRE可能になる最初の年齢
+fire_age = None
+for age, assets in zip(ages, total_assets):
+    if assets >= retirement_threshold:
+        fire_age = age
+        break
+
+# 結果表示
+print("リタイア（FIRE）に必要な資産（円）:", f"{retirement_threshold:,.0f}")
+if fire_age is not None:
+    years = int(fire_age)
+    months = int(round((fire_age - years) * 12))
+    print(f"FIRE可能になる年齢：{years}歳{months}か月（小数表記: {fire_age:.2f}歳）")
+else:
+    print("50歳までにはFIRE水準に達しない。")
+
+final_assets = total_assets[-1]
+print("50歳時点の総資産（円）:", f"{final_assets:,.0f}")
+
+# プロット
+plt.figure(figsize=(10, 6))
+plt.plot(ages, np.array(total_assets) / 10000, label="Total Assets (10^4 yen)")
+plt.axhline(retirement_threshold / 10000, color="red", linestyle="--", label="FIRE Threshold (10^4 yen)")
+plt.xlabel("Age (years)")
+plt.ylabel("Total Assets (10,000 JPY)")
+plt.title("Asset Growth Over Time")
+plt.grid(True)
+plt.legend()
+plt.xlim(34, 50)
+plt.tight_layout()
+plt.show()
