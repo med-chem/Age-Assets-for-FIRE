@@ -26,6 +26,7 @@ monthly_contribution_after = ******#月額積立額(途中から積立額を変�
 annual_return = 0.06#投資信託の年利回り。S&P500を参考に6%をデフォルト設定。
 monthly_return = (1 + annual_return) ** (1 / 12) - 1#投資信託の月次利回り。
 safe_multiplier = 1 / 0.035# 4%ルールよりも保守的な3.5%ルールを採用
+tax = 0.2# 20%設定
 
 # リタイア後の支出 ★要変更
 house_loan = ******#FIRE後の家賃またはローン支払い
@@ -70,7 +71,7 @@ for month in range(plot_months + 1):
 
 # リタイア判定資産額 (3.5%ルール且つ税率20%を考慮)
 annual_fire_expense = fire_expense * 12
-retirement_threshold = annual_fire_expense * safe_multiplier * 1.25  # 税率20%
+retirement_threshold = annual_fire_expense * safe_multiplier / (1-tax)
 
 # FIRE可能になる最初の年齢
 fire_age = None
